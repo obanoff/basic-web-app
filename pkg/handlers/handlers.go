@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	"github.com/tsawler/bookings-app/pkg/config"
-	"github.com/tsawler/bookings-app/pkg/models"
-	"github.com/tsawler/bookings-app/pkg/render"
 	"net/http"
+
+	"github.com/obanoff/basic-web-app/pkg/config"
+	"github.com/obanoff/basic-web-app/pkg/models"
+	"github.com/obanoff/basic-web-app/pkg/render"
 )
 
 // Repo the repository used by the handlers
