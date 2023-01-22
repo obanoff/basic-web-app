@@ -1,0 +1,56 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container">
+
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <img src="/static/images/generals-quarters.png" alt="generals-quarters" class="img-fluid img-thumbnail">
+      </div>
+    </div>
+    
+
+    <div class="row">
+      <div class="col">
+        <h1 class="text-center mt-4">General's Quarters</h1>
+        <p>Your home away from home, set on the majestic waters of Atlantic Ocean, this will be a vacation to remember. Your home away from home, set on the majestic waters of Atlantic Ocean, this will be a vacation to remember. Your home away from home, set on the majestic waters of Atlantic Ocean, this will be a vacation to remember. Your home away from home, set on the majestic waters of Atlantic Ocean, this will be a vacation to remember. Your home away from home, set on the majestic waters of Atlantic Ocean, this will be a vacation to remember. Your home away from home, set on the majestic waters of Atlantic Ocean, this will be a vacation to remember.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div id="check-availability-btn" class="col text-center">
+        {{/* <a href="" class="btn btn-success">Check Availability</a> */}}
+        <button class="btn btn-success">Check Availability</button>
+      </div>
+    </div>
+
+  </div>
+{{end}}
+
+{{define "js"}}
+  <script>
+    document.getElementById('check-availability-btn').addEventListener('click', (e) => {
+      const html = `
+        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+          <div class="form-row">
+            <div class="col">
+              <div class="form-row" id="reservation-dates-modal">
+                <div class="col">
+                  <input disabled required class="form-control" type="date" name="start" id="start" placeholder="Arrival">
+                </div>
+                <div class="col">
+                  <input disabled required class="form-control" type="date" name="end" id="end" placeholder="Departure">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      `;
+
+      Promt().custom({
+        msg: html,
+        title: "Choose your dates"
+      });
+    })
+  </script>
+{{end}}

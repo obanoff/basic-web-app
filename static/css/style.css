@@ -32,6 +32,14 @@ html, body {
   color: #fff;
 }
 
+.datepicker {
+  z-index: 10000;
+}
+
+.datepicker-dropdown {
+  z-index: 10000;
+}
+
 /* <div class="t-store__card__btns-wrapper js-store-buttons-wrapper"><a href="#popup:notavailable" class="js-store-prod-btn2 t-store__card__btn t-store__card__btn_second t-btn t-btn_xs" style="color:#000000;border:1px solid #000000;background-color:#ffffff;border-radius:3px; -moz-border-radius:3px; -webkit-border-radius:3px;font-family:TildaSans;font-weight:400;"><span class="js-store-prod-popup-buy-btn-txt">ОФОРМИТЬ ПРЕДЗАКАЗ</span></a></div> */
 
 

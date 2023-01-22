@@ -39,7 +39,8 @@ func main() {
 	app.TemplateCache = tc
 	app.UseCache = false
 
-	handlers.NewRepo(&app)
+	// handlers.NewRepo(&app)
+	handlers.Repo.App = &app
 
 	render.NewTemplates(&app)
 
