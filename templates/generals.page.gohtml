@@ -31,15 +31,15 @@
   <script>
     document.getElementById('check-availability-btn').addEventListener('click', (e) => {
       const html = `
-        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+        <form id="check-availability-form" action="/search-availability-json" method="get" novalidate class="needs-validation">
           <div class="form-row">
             <div class="col">
               <div class="form-row" id="reservation-dates-modal">
                 <div class="col">
-                  <input disabled required class="form-control" type="date" name="start" id="start" placeholder="Arrival">
+                  <input disabled required class="form-control" type="date" name="start_date" id="start_date" placeholder="Arrival">
                 </div>
                 <div class="col">
-                  <input disabled required class="form-control" type="date" name="end" id="end" placeholder="Departure">
+                  <input disabled required class="form-control" type="date" name="end_date" id="end_date" placeholder="Departure">
                 </div>
               </div>
             </div>

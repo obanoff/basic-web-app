@@ -17,10 +17,39 @@
     </div>
 
     <div class="row">
-      <div class="col text-center">
-        <a href="/search-availability" class="btn btn-success">Check Availability</a>
+      <div id="check-availability-btn" class="col text-center">
+        {{/* <a href="" class="btn btn-success">Check Availability</a> */}}
+        <button class="btn btn-success">Check Availability</button>
       </div>
     </div>
 
   </div>
+{{end}}
+
+{{define "js"}}
+  <script>
+    document.getElementById('check-availability-btn').addEventListener('click', (e) => {
+      const html = `
+        <form id="check-availability-form" action="/search-availability-json" method="get" novalidate class="needs-validation">
+          <div class="form-row">
+            <div class="col">
+              <div class="form-row" id="reservation-dates-modal">
+                <div class="col">
+                  <input disabled required class="form-control" type="date" name="start_date" id="start_date" placeholder="Arrival">
+                </div>
+                <div class="col">
+                  <input disabled required class="form-control" type="date" name="end_date" id="end_date" placeholder="Departure">
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      `;
+
+      Promt().custom({
+        msg: html,
+        title: "Choose your dates"
+      });
+    })
+  </script>
 {{end}}
