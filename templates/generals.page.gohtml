@@ -31,7 +31,7 @@
   <script>
     document.getElementById('check-availability-btn').addEventListener('click', (e) => {
       const html = `
-        <form id="check-availability-form" action="/search-availability-json" method="get" novalidate class="needs-validation">
+        <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
           <div class="form-row">
             <div class="col">
               <div class="form-row" id="reservation-dates-modal">
@@ -49,7 +49,38 @@
 
       Promt().custom({
         msg: html,
-        title: "Choose your dates"
+        title: "Choose your dates",
+
+        willOpen: () => {
+          const elem = document.getElementById('reservation-dates-modal');
+          const rangepicker = new DateRangePicker(elem, {
+            format: "yyyy-mm-dd",
+            showOnFocus: true,
+          });  
+          document.querySelector(".datepicker").style.setProperty("z-index", 50000);
+        },
+
+        didOpen: () => {
+          document.getElementById('start_date').removeAttribute('disabled');
+          document.getElementById('end_date').removeAttribute('disabled');
+        },
+
+        async callback(result) {
+          try {
+            const form = document.getElementById("check-availability-form");
+            const formData = new FormData(form);
+            formData.append("csrf_token", "{{.CSRFToken}}");
+
+            const res = await fetch("/search-availability-json", {
+              method: "post",
+              body: formData,
+            });
+            const data = await res.json();
+            return data
+          } catch(err) {
+            console.error(err);
+          }
+        }
       });
     })
   </script>

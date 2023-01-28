@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/obanoff/basic-web-app/pkg/config"
-	"github.com/obanoff/basic-web-app/pkg/models"
-	"github.com/obanoff/basic-web-app/pkg/render"
+	"github.com/obanoff/basic-web-app/internals/config"
+	"github.com/obanoff/basic-web-app/internals/models"
+	"github.com/obanoff/basic-web-app/internals/render"
 )
 
 // Repo the repository used by the handlers
@@ -71,23 +71,22 @@ func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 }
 
 type jsonResponse struct {
-	Ok      bool   `json:"ok"`
-	Message string `json:"message"`
+	StartDate string `json:"start_date"`
+	EndDate   string `json:"end_date"`
 }
 
 // AvailabilityJSON handles requests for availability and sends back JSON repsonse
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
-	resp := jsonResponse{
-		Ok:      true,
-		Message: "Available!",
-	}
+	// data := r.Body
+
+	// log.Printf("%s", data)
+
+	resp := jsonResponse{}
 
 	out, err := json.MarshalIndent(resp, "", "     ")
 	if err != nil {
 		log.Println(err)
 	}
-
-	log.Println(string(out))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(out))

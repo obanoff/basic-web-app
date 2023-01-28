@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 
 	"github.com/justinas/nosurf"
-	"github.com/obanoff/basic-web-app/pkg/config"
-	"github.com/obanoff/basic-web-app/pkg/models"
+	"github.com/obanoff/basic-web-app/internals/config"
+	"github.com/obanoff/basic-web-app/internals/models"
 )
 
 var functions = template.FuncMap{}

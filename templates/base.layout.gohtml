@@ -199,19 +199,14 @@
           title = "",
         } = c;
 
-        const { value: formValues } = await Swal.fire({
+        const { value: result } = await Swal.fire({
           title,
           html: msg,
           backdrop: false,
           focusConfirm: false,
           showCancelButton: true,
           willOpen: () => {
-            const elem = document.getElementById('reservation-dates-modal');
-            const rangepicker = new DateRangePicker(elem, {
-              format: "yyyy-mm-dd",
-              showOnFocus: true,
-            });  
-            document.querySelector(".datepicker").style.setProperty("z-index", 50000);
+            if (c.willOpen) c.willOpen();
           },
           preConfirm: () => {
             return [
@@ -220,14 +215,24 @@
             ]
           },
           didOpen: () => {
-            document.getElementById('start_date').removeAttribute('disabled');
-            document.getElementById('end_date').removeAttribute('disabled');
+            if (c.didOpen) c.didOpen();
           },
         })
 
-        if (formValues) {
-          Swal.fire(JSON.stringify(formValues))
-        }
+        if (result) {
+          if (result[0] && result[1]) {
+            if (c.callback !== undefined) {
+              const data = await c.callback(result);
+              success({
+                msg: JSON.stringify(data)
+              });
+            }
+          } else {
+            error({
+              msg: "Something went wrong"
+            });
+          }
+        } 
       }
 
       return {
