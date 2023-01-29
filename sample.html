@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    .t-store__prod-popup__btn_disabled, .js-store-prod-popup-buy-btn-txt { opacity: 1 !important;}
+    .t-store__prod-popup__btn-wrapper {
+        cursor: pointer;
+        width: max-content;
+    }
+    .needform .t702__img {
+        display: none;
+    }
+    .needform .t-popup__container {
+        display: flex;
+        overflow: hidden;
+    }
+    .needform .t702__wrapper {
+        width: 50%;
+        box-sizing: border-box;
+    }
+    .t702__leftcol {
+        width: 50%;
+        box-shadow: 0px 0 45px 0 #b1b1b1;
+    }
+    
+    .t702__leftcol_wrapper{
+        width: 100%;
+        height: 100%;
+        padding: 40px 45px;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        font-size: 14px;
+    }
+    .t702__leftcol-img {
+        width: 60%;
+        height: 60%;
+        min-height: 250px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        margin-bottom: 25px;
+    }
+    .t702__leftcol-txt span {
+        box-shadow: 0 1px 0px 0 #c1c1c1;
+        display: inline-block;
+        margin-bottom: 5px;
+        margin-top: 5px;
+    }
+    @media screen and (max-width:800px){
+    .needform .t-popup__container{
+        flex-direction: column;
+        align-items: center;
+    }
+    .needform .t702__wrapper {
+        width: auto;
+    
+      }
+    
+    .t702__leftcol_wrapper {
+        flex-direction: row;
+    }
+    
+    .t702__leftcol {
+        width: 100%;
+        box-shadow: 0px 0 10px 0 #b1b1b1;
+    }
+    .t702__leftcol-img {
+        width: 30%;
+        min-height: 180px;
+        margin-right: 20px;
+        margin-bottom: 0px;
+    }
+    }
+    @media screen and (max-width:500px){
+    .t702__leftcol_wrapper {
+        padding: 30px 10px;  
+    }
+    .t702__leftcol-img {
+        width: 100px;
+        min-height: 100px;
+      }
+    .t702__leftcol_wrapper {
+        font-size: 12px;
+    }
+    }
+    .t-store__prod-popup__btn-wrapper {
+        display: flex;
+    }
+  </style>
+    
+</head>
+<body>
+  
+  <div class="t-store__card__btns-wrapper js-store-buttons-wrapper">
+    <a href="#order" class="js-store-prod-btn2 t-store__card__btn t-store__card__btn_second t-btn t-btn_xs t-store__prod-popup__btn_disabled" style="color:#ffffff;background-color:#3366ff;border-radius:6px; -moz-border-radius:6px; -webkit-border-radius:6px;font-family:TildaSans;">
+      <span class="t-store__card__btn-text">Out of stock</span>
+    </a>
+  </div>
+
+
+
+  <script
+  src="https://code.jquery.com/jquery-3.6.3.js"
+  integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+  crossorigin="anonymous"></script>
+  <script>
+    $( document ).ready(function() {
+    let btnCaption = 'Сообщить о поступлении'; //Напись на кнопке
+    let formlink = '#popup:productout'; //Ссылка на popup
+    let popupBlk = $('div[data-tooltip-hook="'+formlink+'"]').closest('.t-rec');
+    let formNeedID='';
+    if(popupBlk.length){
+        popupBlk.addClass('needform');
+        formNeedID =  popupBlk.attr('id').replace(/[^0-9]/g,"")
+    };
+    popupBlk.find('.t-popup__container').prepend('<div class="t702__leftcol"><div class="t702__leftcol_wrapper"><div class="t702__leftcol-img"></div><div class="t702__leftcol-txt t-descr"></div></div></div>');
+    function needproductClear(){    
+      $('.t-store__prod-popup__btn-wrapper').removeClass('needproduct');
+      $('.t-rec').removeClass('needparent needactive');
+    }
+    function needproduct(){
+      if($(".needactive .t-store__prod-popup__btn").hasClass("t-store__prod-popup__btn_disabled")) {
+                   $('.js-store-prod-popup-buy-btn-txt').html(btnCaption+' &#128383;');
+                   $('.t-store__prod-popup__btn-wrapper').addClass('needproduct');
+                   $('.t-store__prod-popup__btn-wrapper .t-store__prod-popup__btn').wrap('<div class="needproduct-btn"></div>');
+                   $('.t-store .t-popup.t-popup_show , .t-store__product-snippet').closest('.r>div').addClass('needparent');
+      }else{
+          $(".needproduct-btn").contents().unwrap();
+      };
+  
+      if($(".js-store-prod-btn2 .t-store__card__btn .t-store__card__btn_second").hasClass("t-store__prod-popup__btn_disabled")) {
+                   $('.t-store__card__btn-text').html(btnCaption+' &#128383;');
+                   $('.t-store__card__btns-wrapper .js-store-buttons-wrapper').addClass('needproduct');
+                   $('.t-store__card__btns-wrapper .js-store-buttons-wrapper').wrap('<div class="needproduct-btn"></div>');
+                   $('.t-store .t-popup.t-popup_show , .t-store__product-snippet').closest('.r>div').addClass('needparent');
+      }else{
+          $(".needproduct-btn").contents().unwrap();
+      };
+  };
+     var observer = new MutationObserver(function (mutations) {
+      mutations.forEach(function (mutation) {
+          var newVal = $(mutation.target).prop(mutation.attributeName);
+          if (mutation.attributeName === "class") {
+          setTimeout(function(){
+           if($(".t-store .t-popup").hasClass("t-popup_show")) {
+               setTimeout(function(){
+               $('.t-store .t-popup.t-popup_show').closest('.t-rec').addClass('needactive');    
+               needproduct();}, 100);	
+           }else{needproductClear()}; }, 100);
+      };});
+  });
+  observer.observe( document.body, {  attributes: true});
+  setTimeout(function(){
+      if($('div').is('.t-store__product-snippet')){
+          $('.t-store__product-snippet').addClass('needactive');
+          needproduct();
+      };
+  }, 400);	
+  
+  $('body').on('click','.needproduct-btn',function(e){e.preventDefault();
+          let imagNeedProd = $('.needparent  .js-store-product').attr('data-product-img');
+          $('.t702__leftcol-img').css('background-image', 'url('+imagNeedProd+')').attr('data-original', imagNeedProd);
+          let productForText= `Название товара: ${$('.needparent .t-store__prod-popup__name').text()}<br>
+                              ${$('.needparent .t-store__prod-popup__sku').text()}<br>
+                              Цена: ${$('.needparent .js-product-price.t-store__prod-popup__price-value').text()} ${$('.t-store__prod-popup__price-currency').html()}
+                               `;
+      
+          let productForForm=`Название товара: ${$('.needparent .t-store__prod-popup__name').text()}; 
+                              ${$('.needparent .t-store__prod-popup__sku').text()}; 
+                              Цена: ${$('.needparent .js-product-price.t-store__prod-popup__price-value').text()} ${$('.t-store__prod-popup__price-currency').html()}; 
+                               `;
+          
+          let currentCotrols = $(this).closest('.js-product').find('.js-product-controls-wrapper');
+          let numOption = currentCotrols.find('.t-product__option').length;
+          let prodOption={};
+          if(numOption){
+              productForText +=`<br><span>Опции товара:</span><br>`;
+              productForForm +=` Опции товара: `;
+              currentCotrols.find('.t-product__option').each(function(index) {
+                  productForText +=`${$(this).find('div.t-product__option-title').text()}: ${$(this).find('.t-product__option-select').val()}<br>`;
+                  productForForm +=`${$(this).find('div.t-product__option-title').text()}: ${$(this).find('.t-product__option-select').val()}; `;
+              });
+          };
+          $('.t702__leftcol-txt').html(productForText);
+          $('input[name="needproduct"]').val(productForForm.replace(/\s{2,}/g, ' '));
+          $('.needparent .t-popup__close').click();
+          t702_showPopup(formNeedID);
+          t702_resizePopup(formNeedID); 
+  });   
+      $(document).on('click','.needactive .t-slds__bullet',function(e){
+          setTimeout(function(){needproduct();}, 600);});   
+      $(document).on('change','.needactive .t-product__option-select',function(e){
+          setTimeout(function(){
+          $('.t-store__prod-popup__btn-wrapper').removeClass('needproduct');
+          needproduct();}, 600);});   
+      $(document).on('input','.needactive input',function(e){
+          setTimeout(function(){
+          $('.t-store__prod-popup__btn-wrapper').removeClass('needproduct');
+          needproduct();}, 300);});           
+  
+  });
+  
+  </script>
+  
+</body>
+</html>
+
+
+
+
+
+
+

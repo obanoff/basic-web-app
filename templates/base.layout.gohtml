@@ -224,7 +224,7 @@
             if (c.callback !== undefined) {
               const data = await c.callback(result);
               success({
-                msg: JSON.stringify(data)
+                msg: JSON.stringify(data),
               });
             }
           } else {

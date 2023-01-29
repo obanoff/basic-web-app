@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/obanoff/basic-web-app/internals/config"
+	"github.com/obanoff/basic-web-app/internals/forms"
 	"github.com/obanoff/basic-web-app/internals/models"
 	"github.com/obanoff/basic-web-app/internals/render"
 )
@@ -38,7 +39,14 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation is the handler for the make-reservation page
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "make-reservation.page.gohtml", &models.TemplateData{}, r)
+	render.RenderTemplate(w, "make-reservation.page.gohtml", &models.TemplateData{
+		Form: forms.New(nil),
+	}, r)
+}
+
+// PostReservation handles the posting of a reservation form
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+
 }
 
 // Generals is the handler for the genenerals-quoters page
@@ -77,11 +85,11 @@ type jsonResponse struct {
 
 // AvailabilityJSON handles requests for availability and sends back JSON repsonse
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
-	// data := r.Body
-
-	// log.Printf("%s", data)
-
-	resp := jsonResponse{}
+	data := r.Form
+	resp := jsonResponse{
+		StartDate: data.Get("start_date"),
+		EndDate:   data.Get("end_date"),
+	}
 
 	out, err := json.MarshalIndent(resp, "", "     ")
 	if err != nil {
