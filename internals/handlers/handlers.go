@@ -39,14 +39,60 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation is the handler for the make-reservation page
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	var emptyReservation models.Reservation
+	data := make(map[string]interface{})
+
+	data["reservation"] = emptyReservation
+
 	render.RenderTemplate(w, "make-reservation.page.gohtml", &models.TemplateData{
 		Form: forms.New(nil),
+		Data: data,
 	}, r)
 }
 
 // PostReservation handles the posting of a reservation form
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Email:     r.Form.Get("email"),
+		Phone:     r.FormValue("phone_number"),
+	}
+
+	form := forms.New(r.PostForm)
+
+	// form.Has("first_name", r)
+	form.Required(
+		"first_name",
+		"last_name",
+		"email",
+	)
+	form.MinLength("first_name", 3, r)
+	form.IsEmail("email")
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+
+		render.RenderTemplate(w, "make-reservation.page.gohtml", &models.TemplateData{
+			Form: form,
+			Data: data,
+		}, r)
+
+		return
+	}
+
+	// put data into session
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+
+	// redirection
+	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
 // Generals is the handler for the genenerals-quoters page
@@ -98,4 +144,20 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(out))
+}
+
+func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	//get data from session and cast it to model.Reservation type
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		log.Println("cannot get item from session")
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+
+	render.RenderTemplate(w, "reservation-summary.page.gohtml", &models.TemplateData{
+		Data: data,
+	}, r)
 }
