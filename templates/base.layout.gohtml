@@ -135,6 +135,20 @@
     //   button: "my text for the button",
     // });
 
+    // if Error has a value then call notify()
+    {{with .Error}}
+      notify("{{.}}", "error")
+    {{end}}
+
+    {{with .Flash}}
+      notify("{{.}}", "success")
+    {{end}}
+
+    {{with .Warning}}
+      notify("{{.}}", "warning")
+    {{end}}
+
+ng
 
     function Promt() {
       const toast = (c) => {
