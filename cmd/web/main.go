@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/obanoff/basic-web-app/internals/config"
 	"github.com/obanoff/basic-web-app/internals/handlers"
+	"github.com/obanoff/basic-web-app/internals/helpers"
 	"github.com/obanoff/basic-web-app/internals/models"
 	"github.com/obanoff/basic-web-app/internals/render"
 )
@@ -18,6 +20,8 @@ const portNumber = ":8080"
 
 var app config.AppConfig
 var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
 
 // main is the main function
 func main() {
@@ -46,6 +50,12 @@ func run() error {
 	// change this to true when in production
 	app.InProduction = false
 
+	infoLog = log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	app.InfoLog = infoLog
+
+	errorLog = log.New(os.Stdout, "Error\t", log.Ldate|log.Ltime|log.Lshortfile)
+	app.ErrorLog = errorLog
+
 	// set up the session
 	session = scs.New()
 	session.Lifetime = 24 * time.Hour
@@ -67,6 +77,7 @@ func run() error {
 
 	// handlers.NewRepo(&app)
 	handlers.Repo.App = &app
+	helpers.App = &app
 
 	render.NewTemplates(&app)
 
