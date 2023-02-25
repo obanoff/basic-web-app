@@ -1,0 +1,20 @@
+mode: set
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:31.67,33.2 1 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:36.68,38.2 1 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:41.74,51.2 4 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:54.78,56.16 2 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:61.2,79.19 6 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:92.2,95.66 2 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:56.16,59.3 2 0
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:79.19,89.3 4 0
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:99.71,101.2 1 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:104.69,106.2 1 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:109.75,111.2 1 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:114.79,120.2 3 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:123.70,125.2 1 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:133.79,141.16 4 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:145.2,146.22 2 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:141.16,143.3 1 0
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:149.81,152.9 2 1
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:160.2,167.7 4 0
+github.com/obanoff/basic-web-app/internals/handlers/handlers.go:152.9,158.3 4 1

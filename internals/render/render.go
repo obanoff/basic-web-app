@@ -2,10 +2,10 @@ package render
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 
 	"html/template"
-	"log"
 	"net/http"
 	"path/filepath"
 
@@ -17,7 +17,7 @@ import (
 var functions = template.FuncMap{}
 
 var app *config.AppConfig
-var pathToTemplates = "/.templates"
+var pathToTemplates = "./templates"
 
 // NewTemplates sets the config for the template package
 func NewTemplates(a *config.AppConfig) {
@@ -35,9 +35,10 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 }
 
 // RenderTemplate renders a template
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData, r *http.Request) {
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData, r *http.Request) error {
 	var tc map[string]*template.Template
 
+	// if false -> rebuild the cache on every request (good for development mode, to not restart the server each time I've done changes in templates)
 	if app.UseCache {
 		// get the template cache from the app config
 		tc = app.TemplateCache
@@ -47,7 +48,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData,
 
 	t, ok := tc[tmpl]
 	if !ok {
-		log.Fatal("Could not get template from template cache")
+		return errors.New("can't get template from cache")
 	}
 
 	buf := new(bytes.Buffer)
@@ -59,8 +60,10 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData,
 	_, err := buf.WriteTo(w)
 	if err != nil {
 		fmt.Println("error writing template to browser", err)
+		return err
 	}
 
+	return nil
 }
 
 // CreateTemplateCache creates a template cache as a map

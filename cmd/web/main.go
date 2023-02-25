@@ -40,7 +40,7 @@ func main() {
 }
 
 func run() error {
-	// what am I going to put in the session
+	// what I'm going to put in the session
 	gob.Register(models.Reservation{})
 
 	// change this to true when in production
@@ -62,6 +62,7 @@ func run() error {
 	}
 
 	app.TemplateCache = tc
+	// ONLY for development mode: rebuilds cache on every request instead of using already generated cache (usefull when making changes to templates and don't want to restart the server every time)
 	app.UseCache = false
 
 	// handlers.NewRepo(&app)
