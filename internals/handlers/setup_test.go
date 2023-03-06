@@ -17,6 +17,7 @@ import (
 	"github.com/obanoff/basic-web-app/internals/config"
 	"github.com/obanoff/basic-web-app/internals/models"
 	"github.com/obanoff/basic-web-app/internals/render"
+	"github.com/obanoff/basic-web-app/internals/repository/dbrepo"
 )
 
 var app config.AppConfig
@@ -55,9 +56,12 @@ func getRoutes() http.Handler {
 	app.UseCache = true
 
 	// handlers.NewRepo(&app)
-	Repo.App = &app
+	Repo = &Repository{
+		App: &app,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, &app),
+	}
 
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 
 	mux := chi.NewRouter()
 

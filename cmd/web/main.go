@@ -10,10 +10,12 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/obanoff/basic-web-app/internals/config"
+	"github.com/obanoff/basic-web-app/internals/driver"
 	"github.com/obanoff/basic-web-app/internals/handlers"
 	"github.com/obanoff/basic-web-app/internals/helpers"
 	"github.com/obanoff/basic-web-app/internals/models"
 	"github.com/obanoff/basic-web-app/internals/render"
+	"github.com/obanoff/basic-web-app/internals/repository/dbrepo"
 )
 
 const portNumber = ":8080"
@@ -25,10 +27,11 @@ var errorLog *log.Logger
 
 // main is the main function
 func main() {
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.SQL.Close()
 
 	fmt.Printf("Staring application on port %s\n", portNumber)
 
@@ -43,9 +46,12 @@ func main() {
 	}
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	// what I'm going to put in the session
 	gob.Register(models.Reservation{})
+	gob.Register(models.User{})
+	gob.Register(models.Room{})
+	gob.Register(models.Restriction{})
 
 	// change this to true when in production
 	app.InProduction = false
@@ -65,21 +71,36 @@ func run() error {
 
 	app.Session = session
 
+	// connect to database
+	log.Println("Connecting to database...")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=bookings user=eugene password=")
+	if err != nil {
+		log.Fatal("Cannot connect to DB! Dying...")
+	}
+	log.Println("Connected to database!")
+
 	tc, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil, err
 	}
 
 	app.TemplateCache = tc
+
 	// ONLY for development mode: rebuilds cache on every request instead of using already generated cache (usefull when making changes to templates and don't want to restart the server every time)
 	app.UseCache = false
 
 	// handlers.NewRepo(&app)
-	handlers.Repo.App = &app
+	// handlers.Repo.App = &app
+	// handlers.Repo.DB = dbrepo.NewPostgresRepo(db.SQL, &app)
+	handlers.Repo = &handlers.Repository{
+		App: &app,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, &app),
+	}
+
 	helpers.App = &app
 
-	render.NewTemplates(&app)
+	render.NewRenderer(&app)
 
-	return nil
+	return db, nil
 }
